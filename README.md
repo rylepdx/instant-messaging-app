@@ -110,12 +110,12 @@ React escapes all string content by default. `dangerouslySetInnerHTML` is never 
 
 **Message deduplication** — Optimistic UI would add a message locally, then the socket `receiveMessage` event would add it again. Fixed by comparing the sender ID against the current user ID and skipping messages that originated from the current user.
 
-**Backend constraints** — The TA-provided backend API primarily supported authentication, contact management, direct message retrieval, and real-time direct messaging. Channel-related functionality was not fully supported by the remote backend used for frontend integration, so some channel behavior was handled with local UI state where necessary.
+**Channel integration** — The backend supports channel endpoints, however full channel integration was not achieved within the project timeline. Channel messages do not sync between users in real time and message history could not be retrieved. Channel behavior was handled with local UI state as a fallback.
 
 **Jest + jsdom compatibility** — jsdom did not implement `TextEncoder` or `scrollIntoView`. Fixed by adding polyfills in `jest.setup.js`.
 
 ## Known Limitations
 
-- Channel messages are stored locally only and do not sync between users
-- Some channel-related behaviors required local UI state workarounds because full backend support was unavailable
-- Channel deletion was handled locally in the frontend when backend support was not available
+- Channel real-time messaging was not fully achieved during frontend integration
+- Channel message history could not be retrieved during testing
+- Channel deletion falls back to local state removal when the backend returns an error
