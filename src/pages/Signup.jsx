@@ -131,7 +131,7 @@ function Signup() {
         <label style={styles.label}>Email</label>
         <input
           type="email"
-          placeholder="you@example.com"
+          placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSignup()}
