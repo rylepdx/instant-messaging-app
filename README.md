@@ -9,7 +9,7 @@ GitHub: https://github.com/rylepdx/instant-messaging-app.git
 
 Frontend client for a real-time instant messaging web application similar to Slack. The backend was provided by the TA as a black-box URL. The client connects over REST (Axios) and WebSocket (Socket.IO).
 
-The frontend implements the required client-side features, with local UI handling used where backend support was unavailable:
+The frontend implements the main client-side features of the application, including:
 
 - User registration, login, and logout
 - First-time profile setup (first + last name)
@@ -19,7 +19,7 @@ The frontend implements the required client-side features, with local UI handlin
 - Delete a direct message conversation
 - Create channels with member search
 - Navigate between DMs and channels
-- Delete channels
+- Delete channels (partially implemented with local UI fallback)
 - Authentication gating and error handling
 
 ## Tech Stack
@@ -106,16 +106,14 @@ React escapes all string content by default. `dangerouslySetInnerHTML` is never 
 
 ## Challenges
 
-**Real-time socket timing** — Socket was connecting before user info loaded, so the backend could not map the socket to the correct user. Fixed by initializing the socket inside a `useEffect` that runs only after `currentUser` is set, and moving socket registration to a module-level `socketClient.js` to prevent re-registration on re-renders.
+**Real-time socket timing** - Socket was connecting before user info loaded, so the backend could not map the socket to the correct user. Fixed by initializing the socket inside a `useEffect` that runs only after `currentUser` is set, and moving socket registration to a module-level `socketClient.js` to prevent re-registration on re-renders.
 
-**Message deduplication** — Optimistic UI would add a message locally, then the socket `receiveMessage` event would add it again. Fixed by comparing the sender ID against the current user ID and skipping messages that originated from the current user.
+**Message deduplication** - Optimistic UI would add a message locally, then the socket `receiveMessage` event would add it again. Fixed by comparing the sender ID against the current user ID and skipping messages that originated from the current user.
 
-**Channel integration** — The backend supports channel endpoints, however full channel integration was not achieved within the project timeline. Channel messages do not sync between users in real time and message history could not be retrieved. Channel behavior was handled with local UI state as a fallback.
+**Channel integration** - The backend supported channel endpoints, but full channel integration was not completed within the project timeline. During testing, channel messages did not reliably sync between users in real time, and channel message history could not be retrieved consistently. As a fallback, some channel behavior was handled with local UI state.
 
-**Jest + jsdom compatibility** — jsdom did not implement `TextEncoder` or `scrollIntoView`. Fixed by adding polyfills in `jest.setup.js`.
+**Jest + jsdom compatibility** - jsdom did not implement `TextEncoder` or `scrollIntoView`. Fixed by adding polyfills in `jest.setup.js`.
 
 ## Known Limitations
 
-- Channel real-time messaging was not fully achieved during frontend integration
-- Channel message history could not be retrieved during testing
-- Channel deletion falls back to local state removal when the backend returns an error
+Full channel integration was not completed during frontend development. Channel messages did not reliably synchronize between users in real time during testing. Channel message history could not be retrieved consistently. In some cases, channel-related behavior fell back to local UI state handling when backend integration did not behave as expected.
